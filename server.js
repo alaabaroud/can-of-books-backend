@@ -9,9 +9,9 @@ const express = require('express');
  const mongoose = require('mongoose');
 
  const server = express();
- server.use(cors);
+ server.use(cors());
 
- const PORT = process.env.PORT || 3003;
+ const PORT = process.env.PORT || 3030;
 
  
 // const Books=require('./Books');
@@ -32,22 +32,26 @@ const express = require('express');
 
 
 mongoose.connect('mongodb://localhost:27017/Booksdb', {useNewUrlParser: true, useUnifiedTopology: true});
+mongoose.set('useCreateIndex', true);
+
 
  const bookSchema = new mongoose.Schema({
   title: String,
   description:String,
   status:String,
-  email:String
+  
 });
 
-// const myBookModel = mongoose.model('Books', bookSchema);
+
+
+
 
 
 const userSchema = new mongoose.Schema({
   email: {type: String, unique: true},
   book : [bookSchema]
 })
-
+// const myBookModel = mongoose.model('Books', bookSchema);
 const userModel = mongoose.model('user', userSchema);
 
 
@@ -106,7 +110,33 @@ function seedBooksCollection(){
 
 
 }
-seedBooksCollection();
+// seedBooksCollection();
+
+server.get('/',homeRoute);
+server.get('/book',bookHandler);
+
+function homeRoute(req,res){
+
+  req.send('Home');
+}
+
+function bookHandler(req,res){
+ let email=req.query.email;
+
+ userModel.find({email:email},function(err,data){
+  if(error){
+    console.log(" sorry, failed with errors");
+  }
+  else{
+    // console.log(data);
+    res.send(data);
+  }
+ })
+
+
+}
+
+
  
 
  server.listen(PORT, () => console.log(`listening on ${PORT}`));
