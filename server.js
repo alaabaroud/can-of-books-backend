@@ -11,7 +11,7 @@ const express = require('express');
  const server = express();
  server.use(cors());
 
- const PORT = process.env.PORT || 3030;
+ const PORT = process.env.PORT || 3001;
 
  
 // const Books=require('./Books');
@@ -86,17 +86,18 @@ function seedBooksCollection(){
     email : "obadanaser135@gmail.com",
     book :[
       {
-        title: 'Naruto',
-        description:'is a Japanese manga series written and illustrated by Masashi Kishimoto. It tells the story of Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage, the leader of his village. ',
-        status:'Read',
-        
-      },
-      {
         title: 'Attack on Titan',
         description:'is a Japanese dark fantasy anime television series adapted from the manga of the same name by Hajime Isayama that premiered on April 7, 2013. It has aired on NHK General TV in Japan,[d] and Aniplus Asia in various Asia-Pacific countries.',
         status:'Read',
         
       },
+      {
+        title: 'Naruto',
+        description:'is a Japanese manga series written and illustrated by Masashi Kishimoto. It tells the story of Naruto Uzumaki, a young ninja who seeks recognition from his peers and dreams of becoming the Hokage, the leader of his village. ',
+        status:'Read',
+        
+      },
+     
       {
         title: 'Death Note',
         description:'An intelligent high school student goes on a secret crusade to eliminate criminals from the world after discovering a notebook capable of killing anyone whose name is written into it.',
@@ -117,14 +118,14 @@ server.get('/book',bookHandler);
 
 function homeRoute(req,res){
 
-  req.send('Home');
+  res.send('Home');
 }
 
 function bookHandler(req,res){
  let email=req.query.email;
 
  userModel.find({email:email},function(err,data){
-  if(error){
+  if(err){
     console.log(" sorry, failed with errors");
   }
   else{
