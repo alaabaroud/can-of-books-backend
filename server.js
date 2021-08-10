@@ -107,6 +107,7 @@ function seedBooksCollection(){
     ]
   })
   user1.save();
+  
   user2.save();
 
 
