@@ -107,7 +107,6 @@ function seedBooksCollection(){
     ]
   })
   user1.save();
-  
   user2.save();
 
 
@@ -130,8 +129,8 @@ function bookHandler(req,res){
     console.log(" sorry, failed with errors");
   }
   else{
-    // console.log(data);
-    res.send(data);
+    console.log(data[0].book);
+    res.send(data[0].book);
   }
  })
 
@@ -143,5 +142,8 @@ function bookHandler(req,res){
 
  server.listen(PORT, () => console.log(`listening on ${PORT}`));
 
+
+
+ 
 
 
