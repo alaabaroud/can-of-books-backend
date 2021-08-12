@@ -36,6 +36,7 @@ mongoose.connect('mongodb://localhost:27017/Booksdb', {useNewUrlParser: true, us
 
 
  const bookSchema = new mongoose.Schema({
+   email: String,
   title: String,
   description:String,
   status:String,
@@ -54,6 +55,9 @@ const userSchema = new mongoose.Schema({
 })
 // const myBookModel = mongoose.model('Books', bookSchema);
 const userModel = mongoose.model('user', userSchema);
+
+
+
 
 
 function seedBooksCollection(){
@@ -117,10 +121,29 @@ function seedBooksCollection(){
 
 
 }
-seedBooksCollection();
+// seedBooksCollection();
 
 server.get('/',homeRoute);
 server.get('/book',bookHandler);
+server.post ('/addbooks', addBooksHandler);
+
+function addBooksHandler (req,res){
+const {email, title, description, status} = req.body;
+userModel.find({email:email},(err,data) => {
+if(err){
+  res.send('sorry, failed with errors')
+}else {
+  data[0].book.push ({
+    title : title,
+    description :description,
+    status: status,
+  })
+  data[0].sava();
+  res.send(data[0].book);
+
+}
+} )
+}
 
 function homeRoute(req,res){
 
