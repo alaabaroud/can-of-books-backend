@@ -7,11 +7,12 @@ const express = require('express');
 // const jwt = require('jsonwebtoken');
 // const jwksClient = require('jwks-rsa');
  const mongoose = require('mongoose');
-
  const server = express();
  server.use(cors());
 
  const PORT = process.env.PORT || 3001;
+ server.use(express.json());
+
 
  
 // const Books=require('./Books');
@@ -32,11 +33,10 @@ const express = require('express');
 
 
 mongoose.connect('mongodb://localhost:27017/Booksdb', {useNewUrlParser: true, useUnifiedTopology: true});
-// mongoose.set('useCreateIndex', true);
+mongoose.set('useCreateIndex', true);
 
 
  const bookSchema = new mongoose.Schema({
-   email: String,
   title: String,
   description:String,
   status:String,
@@ -125,10 +125,12 @@ function seedBooksCollection(){
 
 server.get('/',homeRoute);
 server.get('/book',bookHandler);
-server.post ('/addbooks', addBooksHandler);
+server.post('/add', addBooksHandler);
 
 function addBooksHandler (req,res){
+console.log(req.body);
 const {email, title, description, status} = req.body;
+
 userModel.find({email:email},(err,data) => {
 if(err){
   res.send('sorry, failed with errors')
@@ -152,6 +154,7 @@ function homeRoute(req,res){
 
 function bookHandler(req,res){
  let email=req.query.email;
+ console.log(req.query.email);
 
  userModel.find({email:email},function(err,data){
   if(err){
