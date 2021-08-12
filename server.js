@@ -32,7 +32,7 @@ const express = require('express');
 
 
 mongoose.connect('mongodb://localhost:27017/Booksdb', {useNewUrlParser: true, useUnifiedTopology: true});
-// mongoose.set('useCreateIndex', true);
+mongoose.set('useCreateIndex', true);
 
 
  const bookSchema = new mongoose.Schema({
