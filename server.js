@@ -126,6 +126,8 @@ function seedBooksCollection(){
 server.get('/',homeRoute);
 server.get('/book',bookHandler);
 server.post('/add', addBooksHandler);
+server.delete('/books/:index',deleteBookHandler);
+
 
 function addBooksHandler (req,res){
 console.log(req.body);
@@ -133,7 +135,7 @@ const {email, title, description, status} = req.body;
 
 userModel.find({email:email},(err,data) => {
 if(err){
-  res.send('sorry, failed with errors')
+  res.send('sorry, failed with errors');
 }else {
   data[0].book.push ({
     title : title,
@@ -171,10 +173,29 @@ function bookHandler(req,res){
 
 }
 
+function deleteBookHandler(req,res){
+  const index=req.params.index;
+  const {email}=req.query;
+
+  userModel.find({email:email},(error,data)=>{
+    const booksArr=data[0].book.filter((books,idx)=>{
+      if(idx !=index){
+        return true;
+      }
+      console.log('newArr: ',booksArr);
+      data[0].book=booksArr;
+      data[0].save();
+      res.send(data[0].book);
+    })
+
+  })
+
+}
+
 
  
 
- server.listen(PORT, () => console.log(`listening on ${PORT}`));
+server.listen(PORT, () => console.log(`listening on ${PORT}`));
 
  
 
